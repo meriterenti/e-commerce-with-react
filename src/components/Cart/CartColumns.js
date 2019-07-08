@@ -14,15 +14,6 @@ export default function CartColumns(props) {
     },
   }))(TableCell);
 
-  const StyledTableRow = withStyles(theme => ({
-    root: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  }))(TableRow);
-
-  const {cart} = props.value;
   return (
     <TableRow>
       <StyledTableCell align="right"></StyledTableCell>

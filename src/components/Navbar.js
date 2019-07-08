@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {ProductConsumer} from '../context';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -161,19 +162,27 @@ export default function Navbar() {
           </Typography>
           <MenuItem><Link to="/" className={classes.link}>Products</Link></MenuItem>
           <MenuItem><Link to="/cart" className={classes.link}>Cart</Link></MenuItem>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search MUST work…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'Search' }}
-            />
-          </div>
+          <ProductConsumer>
+            {value=>{
+              const {handleSearch} = value;
+              return(
+                <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ 'aria-label': 'Search' }}
+                  onChange={e=>handleSearch(e.target.value)}
+                />
+                </div>
+              )
+            }}
+          </ProductConsumer>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton

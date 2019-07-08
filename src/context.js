@@ -148,6 +148,16 @@ class ProductProvider extends React.Component {
       localStorage.setItem('total', JSON.stringify(this.state.cartTotal))
     })
   }
+  handleSearch = val => {
+    this.setProducts();
+    val = val.toLowerCase();
+    const products = JSON.parse(localStorage.getItem('allProd'));
+    const tempProducts = [...products]
+    let filteredProducts = tempProducts.filter(item =>item.title.toLowerCase().startsWith(val));
+    this.setState(()=> {
+      return { products: [...filteredProducts] }
+    })
+  }
   render(){
     return(
       <ProductContext.Provider value={{
@@ -160,7 +170,8 @@ class ProductProvider extends React.Component {
         increment: this.increment,
         decrement: this.decrement,
         removeItem: this.removeItem,
-        clearCart: this.clearCart
+        clearCart: this.clearCart,
+        handleSearch: this.handleSearch
       }}>
         {this.props.children}
       </ProductContext.Provider>
