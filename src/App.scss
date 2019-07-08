@@ -3,6 +3,19 @@ body {
   a {
     text-decoration: none;
   }
+  #page-numbers {
+    display: flex;
+    li {
+      list-style-type: none;
+      button {
+        min-width: 50px;
+        padding: 3px;
+      }
+    };
+    button {
+      padding: 3px 10px;
+    }
+  }
 }
 
 .App {

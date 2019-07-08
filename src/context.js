@@ -14,7 +14,9 @@ class ProductProvider extends React.Component {
       modalProduct: detailProduct,
       cartSubTotal: 0,
       cartTax: 0,
-      cartTotal: 0
+      cartTotal: 0,
+      currentPage: 1,
+      itemsPerPage: 5
     };
   };
   componentDidMount(){
@@ -33,6 +35,8 @@ class ProductProvider extends React.Component {
     this.setState(() =>{
     //  return {products: tempProducts}
       return {products : !localStorage.getItem('allProd') ? tempProducts: JSON.parse(localStorage.getItem('allProd'))}
+    }, ()=>{
+      localStorage.setItem('allProd', JSON.stringify(this.state.products))
     })
   };
   getItem = id => {
@@ -149,14 +153,33 @@ class ProductProvider extends React.Component {
     })
   }
   handleSearch = val => {
-    this.setProducts();
+    this.setState({currentPage: 1});
     val = val.toLowerCase();
-    const products = JSON.parse(localStorage.getItem('allProd'));
+    const products = localStorage.getItem('allProd') ? JSON.parse(localStorage.getItem('allProd')): [...this.state.products];
     const tempProducts = [...products]
     let filteredProducts = tempProducts.filter(item =>item.title.toLowerCase().startsWith(val));
     this.setState(()=> {
       return { products: [...filteredProducts] }
     })
+  }
+  handlePageChange = pageNumber => {
+    this.setState({currentPage: pageNumber});
+  }
+  handlePrevNextPage = (value) => {
+    console.log(value)
+    let pages = this.state.products.length / this.state.itemsPerPage
+    let page = this.state.currentPage
+    if(value === 'prev'){
+      if(page < 2){
+        return null
+      }
+      this.setState({currentPage: page-1});
+    }else{
+      if(page >= pages) {
+        return null
+      }
+      this.setState({currentPage: page+1});
+    }
   }
   render(){
     return(
@@ -171,7 +194,9 @@ class ProductProvider extends React.Component {
         decrement: this.decrement,
         removeItem: this.removeItem,
         clearCart: this.clearCart,
-        handleSearch: this.handleSearch
+        handleSearch: this.handleSearch,
+        handlePageChange: this.handlePageChange,
+        handlePrevNextPage: this.handlePrevNextPage
       }}>
         {this.props.children}
       </ProductContext.Provider>
